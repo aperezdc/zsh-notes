@@ -16,9 +16,12 @@ function notes-edit
 
 	local -a output
 	read -A -d '\n' -r output < <( command find "${ZSH_NOTES_HOME}" \
-		-type f -name '*.md' | sed -e 's/\.md$//' | \
-		fzf --delimiter=/ --nth=-1 --with-nth=-1 --layout=reverse \
-		--query="${LBUFFER}" --print-query )
+		-type f -name '*.md' | sed -e 's/\.md$//' | fzf \
+			--delimiter=/ --nth=-1 --with-nth=-1 \
+			--query="${LBUFFER}" --print-query \
+			--bind='ctrl-n:print-query' \
+			--layout=reverse \
+		)
 
 	local file_path
 	if [[ ${#output[@]} -eq 3 ]] ; then

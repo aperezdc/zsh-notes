@@ -21,6 +21,12 @@ and the following variables:
 - `ZSH_NOTES_HOME`: Path to the directory containing Markdown text files.
   If unset, `~/Notes` will be used as the default.
 
+In the file selector, the usual `fzf` key bindings apply, plus the following
+additional ones:
+
+- `Ctrl-N`: Always creates a new file named after the query string, regardless
+  of whether it matches files or not.
+
 
 ## Installation
 
