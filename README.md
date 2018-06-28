@@ -13,10 +13,21 @@ directory.
 
 The plugin defines a Zle widgets:
 
-- `notes-edit`: Opens the file selector, and invokes the text editor on the
-  selected file or creates a new one.
+- `notes-edit-widget`: Opens the file selector, and invokes the text
+  editor on the selected file or creates a new one.
 
-and the following variables:
+the following functions:
+
+- `notes-home`: Prints the directory where Markdown file are stored.
+- `notes-list-files`: Prints a list of absolute paths to all the files
+  contained in the directory returned by `notes-home`.
+- `notes-list`: Prints a list of names (sans the `.md` suffix) for all
+  the files listed by `notes-list-files`, with the prefix directory
+  returned by `notes-home` removed.
+- `notes-pick-fzf`: Opens a file selector, and prints the chosen item
+  to standard output.
+
+and uses the following variables:
 
 - `ZSH_NOTES_HOME`: Path to the directory containing Markdown text files.
   If unset, `~/Notes` will be used as the default.
@@ -24,8 +35,10 @@ and the following variables:
 In the file selector, the usual `fzf` key bindings apply, plus the following
 additional ones:
 
-- `Ctrl-N`: Always creates a new file named after the query string, regardless
+- `Ctrl-N`: Creates a new file named after the query string, regardless
   of whether it matches files or not.
+
+- `Tab`: Toggle the preview panel.
 
 
 ## Installation
@@ -46,6 +59,6 @@ configuration could be:
 
 ```sh
 # Alt-N: Open the notes selector.
-bindkey '\en' notes-edit
+bindkey '\en' notes-edit-widget
 ```
 
