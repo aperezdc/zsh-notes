@@ -18,7 +18,7 @@ function notes-list-files
 	emulate -L zsh
 	setopt local_options glob nullglob
 	local note
-	for note in "$(notes-home)"/**/*.md ; builtin print -r "${note}"
+	for note in "$(notes-home)"/**/*.md(on) ; builtin print -r "${note}"
 }
 
 function notes-list
@@ -26,7 +26,7 @@ function notes-list
 	emulate -L zsh
 	setopt local_options nullglob
 	local note
-	for note in "$(notes-home)"/**/*.md ; builtin print -r "${note:t:r}"
+	for note in "$(notes-home)"/**/*.md(on) ; builtin print -r "${note:t:r}"
 }
 
 function --notes-list-fzf
@@ -34,7 +34,7 @@ function --notes-list-fzf
 	emulate -L zsh
 	setopt local_options nullglob
 	local note
-	for note in "$(notes-home)"/**/*.md ; builtin print -rN "${note:t:r}"
+	for note in "$(notes-home)"/**/*.md(om) ; builtin print -rN "${note:t:r}"
 }
 
 function --notes-fzf
