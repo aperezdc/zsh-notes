@@ -49,10 +49,15 @@ function --notes-fzf
 function notes-pick-fzf
 {
 	emulate -L zsh
-	local chosen="$(notes-home)/$(--notes-list-fzf | --notes-fzf).md"
-	if [[ -r ${chosen} ]] ; then
-		builtin print -r "${chosen}"
+
+	local H=$(notes-home)
+	local chosen=$(--notes-list-fzf | --notes-fzf "$@")
+
+	if [[ -z ${chosen} ]] ; then
+		return 1
 	fi
+
+	print -rl "$H/${chosen}.md"
 }
 
 function notes-edit-widget
@@ -60,20 +65,25 @@ function notes-edit-widget
 	emulate -L zsh
 	setopt local_options err_return
 
-	local H=$(notes-home)
-	local chosen=$(--notes-list-fzf | --notes-fzf "${LBUFFER}")
-
-	if [[ -z ${chosen} ]] ; then
+	local -a editor=( "${(f)$(whence -p "${EDITOR}" "${VISUAL}" vim nvim vi)}" )
+	if [[ ${#editor} -eq 0 ]] ; then
+		print '\bCannot find a suitable text editor' 1>&2
 		zle redisplay
 		return
 	fi
 
-	chosen="$H/${chosen}.md"
+	local chosen=$(notes-pick-fzf "${BUFFER}")
+	if [[ -z ${chosen} ]] ; then
+		zle redisplay
+		return 1
+	fi
+
 	if [[ ! -r ${chosen} && ! -d $H ]] ; then
 		command mkdir -p "$H"
 	fi
 
-	"${EDITOR:-${VISUAL:-vi}}" "${chosen}"
+	command "${editor[1]}" "${chosen}"
+	zle kill-buffer
 }
 
 zle -N notes-edit-widget
