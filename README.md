@@ -11,10 +11,11 @@ directory.
 - `${EDITOR}` is launched to view and edit files. Like most tools do,
   `${VISUAL}` will be tried as well, with `vi` as last fallback.
 
-The plugin defines a Zle widgets:
+The plugin defines one Zle widgets:
 
 - `notes-edit-widget`: Opens the file selector, and invokes the text
-  editor on the selected file or creates a new one.
+  editor on the selected file or creates a new one. The input buffer is
+  left untouched.
 
 the following functions:
 
@@ -58,7 +59,7 @@ By default the widgets defined by the plugin are not bound. A typical
 configuration could be:
 
 ```sh
-# Alt-N: Open the notes selector.
-bindkey '\en' notes-edit-widget
+# Ctrl-N: Open the notes selector.
+bindkey '^N' notes-edit-widget
 ```
 
