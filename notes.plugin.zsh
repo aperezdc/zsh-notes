@@ -73,6 +73,7 @@ function notes-edit-widget
 		return
 	fi
 
+	local H=$(notes-home)
 	while true ; do
 		local chosen=$(notes-pick-fzf)
 		if [[ -z ${chosen} ]] ; then
