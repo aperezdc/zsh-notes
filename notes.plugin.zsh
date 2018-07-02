@@ -82,7 +82,7 @@ function notes-edit-widget
 		command mkdir -p "$H"
 	fi
 
-	command "${editor[1]}" "${chosen}"
+	command "${editor[1]}" "${chosen}" < /dev/tty
 	zle kill-buffer
 }
 
