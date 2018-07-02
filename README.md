@@ -28,11 +28,6 @@ the following functions:
 - `notes-pick-fzf`: Opens a file selector, and prints the chosen item
   to standard output.
 
-and uses the following variables:
-
-- `ZSH_NOTES_HOME`: Path to the directory containing Markdown text files.
-  If unset, `~/Notes` will be used as the default.
-
 In the file selector, the usual `fzf` key bindings apply, plus the following
 additional ones:
 
@@ -63,3 +58,9 @@ configuration could be:
 bindkey '^N' notes-edit-widget
 ```
 
+Additional configuration is done using Zsh styles. The following lists
+the available styles and their defaults:
+
+```sh
+zstyle :notes home ''  # If unset, ~/Notes is used as default.
+```

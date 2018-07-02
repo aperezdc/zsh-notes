@@ -9,8 +9,9 @@
 function notes-home
 {
 	emulate -L zsh
-	local p=${ZSH_NOTES_HOME:=${HOME}/Notes}
-	builtin print -r "${p:a}"
+	local p
+	zstyle -s :notes home p || p="${HOME}/Notes"
+	builtin print -rl "${p:a}"
 }
 
 function notes-list-files
