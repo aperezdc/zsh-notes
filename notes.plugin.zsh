@@ -75,14 +75,18 @@ function notes-edit-widget
 
 	while true ; do
 		local chosen=$(notes-pick-fzf)
-		[[ -n ${chosen} ]] || break
+		if [[ -z ${chosen} ]] ; then
+			break
+		fi
 
 		if [[ ! -r ${chosen} && ! -d $H ]] ; then
 			command mkdir -p "$H"
 		fi
 		command "${editor[1]}" "${chosen}" < /dev/tty
 
-		zstyle -t :notes:widget once || break
+		if zstyle -t :notes:widget once ; then
+			break
+		fi
 	done
 	zle redisplay
 }
