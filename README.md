@@ -62,5 +62,9 @@ Additional configuration is done using Zsh styles. The following lists
 the available styles and their defaults:
 
 ```sh
-zstyle :notes home ''  # If unset, ~/Notes is used as default.
+# If unset, ~/Notes is used as default.
+zstyle :notes home  ''
+
+# When set, exits the notes widget after one use.
+zstyle :notes:widget once no
 ```
