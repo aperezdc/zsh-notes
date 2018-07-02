@@ -38,7 +38,7 @@ function --notes-fzf
 {
 	emulate -L zsh
 	command fzf --read0 --ansi \
-		--preview="cat '$(notes-home)/{}.md'" \
+		--preview="cat '$(notes-home)'/{}.md" \
 		--layout=reverse --inline-info \
 		--preview-window=down:hidden \
 		--bind=tab:toggle-preview \
