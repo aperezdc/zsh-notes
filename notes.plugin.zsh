@@ -28,18 +28,18 @@ function notes-list
 	print -nrl "$(notes-home)"/**/*.md(.on:t:r) ''
 }
 
-function --notes-list-fzf
+function --notes-list-generic
 {
 	emulate -L zsh
 	setopt local_options nullglob
 	print -nrN "$(notes-home)"/**/*.md(om:t:r) ''
 }
 
-function --notes-fzf
+function --notes-pick-fzf
 {
 	emulate -L zsh
 	command fzf --read0 --ansi \
-		--preview="cat '$(notes-home)'/{}.md" \
+		--preview="/home/aperez/devel/lowtty/lowtty '$(notes-home)'/{}.md" \
 		--layout=reverse --inline-info \
 		--preview-window=down:hidden \
 		--bind=tab:toggle-preview \
@@ -47,12 +47,38 @@ function --notes-fzf
 		--query="${1:-}"
 }
 
-function notes-pick-fzf
+function --notes-pick-skim
+{
+	emulate -L zsh
+	command sk --read0 --ansi \
+		--preview="cat '$(notes-home)'/{}.md" \
+		--reverse \
+		--preview-window=down:hidden \
+		--bind=tab:toggle-preview \
+		--bind=ctrl-n:print-query \
+		--query="${1:-}"
+}
+
+function notes-pick
 {
 	emulate -L zsh
 
+	local pick
+	if zstyle -s :notes:widget picker pick ; then
+		case "${pick}" in
+			fzf | skim)
+				;;
+			*)
+				print -lu 2 "Unsupported picker: ${pick}"
+				return 1
+				;;
+		esac
+	else
+		pick='fzf'
+	fi
+
 	local H=$(notes-home)
-	local chosen=$(--notes-list-fzf | --notes-fzf "$@")
+	local chosen=$(--notes-list-generic | "--notes-pick-${pick}" "$@")
 
 	if [[ -z ${chosen} ]] ; then
 		return 1
@@ -75,7 +101,7 @@ function notes-edit-widget
 
 	local H=$(notes-home)
 	while true ; do
-		local chosen=$(notes-pick-fzf)
+		local chosen=$(notes-pick)
 		if [[ -z ${chosen} ]] ; then
 			break
 		fi

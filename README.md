@@ -67,4 +67,7 @@ zstyle :notes home  ''
 
 # When set, exits the notes widget after one use.
 zstyle :notes:widget once no
+
+# Choose the picker used by the widget. Supported values: fzf, skim.
+zstyle :notes:widget picker fzf
 ```
