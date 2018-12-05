@@ -21,18 +21,23 @@ function notes-list-files
 	print -nrl "$(notes-home)"/**/*.md(.on) ''
 }
 
-function notes-list
+function --notes-list-nullsep
+{
+	emulate -L zsh
+	setopt local_options nullglob
+	print -nrN "$(notes-home)"/**/*.md(om:t:r) ''
+}
+
+function --notes-list-lines
 {
 	emulate -L zsh
 	setopt local_options nullglob
 	print -nrl "$(notes-home)"/**/*.md(.on:t:r) ''
 }
 
-function --notes-list-generic
+function notes-list
 {
-	emulate -L zsh
-	setopt local_options nullglob
-	print -nrN "$(notes-home)"/**/*.md(om:t:r) ''
+	--notes-list-lines "$@"
 }
 
 function --notes-pick-fzf
@@ -59,14 +64,24 @@ function --notes-pick-skim
 		--query="${1:-}"
 }
 
+function --notes-pick-fzy
+{
+	emulate -L zsh
+	command fzy --query="${1:-}"
+}
+
 function notes-pick
 {
 	emulate -L zsh
 
 	local pick
+	local list='nullsep'
 	if zstyle -s :notes:widget picker pick ; then
 		case "${pick}" in
 			fzf | skim)
+				;;
+			fzy)
+				list='lines'
 				;;
 			*)
 				print -lu 2 "Unsupported picker: ${pick}"
@@ -78,7 +93,7 @@ function notes-pick
 	fi
 
 	local H=$(notes-home)
-	local chosen=$(--notes-list-generic | "--notes-pick-${pick}" "$@")
+	local chosen=$("--notes-list-${list}" | "--notes-pick-${pick}" "$@")
 
 	if [[ -z ${chosen} ]] ; then
 		return 1
