@@ -45,7 +45,7 @@ function --notes-pick-fzf
 	emulate -L zsh
 	command fzf --read0 --ansi \
 		--preview="/home/aperez/devel/lowtty/lowtty '$(notes-home)'/{}.md" \
-		--layout=reverse --inline-info \
+		--layout=reverse --inline-info --prompt='(notes) ' \
 		--preview-window=down:hidden \
 		--bind=tab:toggle-preview \
 		--bind=ctrl-n:print-query \
@@ -57,7 +57,7 @@ function --notes-pick-skim
 	emulate -L zsh
 	command sk --read0 --ansi \
 		--preview="cat '$(notes-home)'/{}.md" \
-		--reverse \
+		--reverse --prompt='(notes) ' \
 		--preview-window=down:hidden \
 		--bind=tab:toggle-preview \
 		--bind=ctrl-n:print-query \
@@ -67,7 +67,7 @@ function --notes-pick-skim
 function --notes-pick-fzy
 {
 	emulate -L zsh
-	command fzy --query="${1:-}"
+	command fzy --prompt='(notes) ' --query="${1:-}"
 }
 
 function notes-pick
