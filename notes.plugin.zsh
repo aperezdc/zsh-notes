@@ -40,28 +40,45 @@ function notes-list
 	--notes-list-lines "$@"
 }
 
+function --notes-pick-fzf-or-skim
+{
+	emulate -L zsh
+	local bin=$1
+	shift
+
+	local -a cmd=(
+		--read0
+		--ansi
+		--bind=ctrl-n:print-query
+		--prompt='(notes) '
+		"$@"
+	)
+
+	# Add preview command, if configured.
+	local -a previewcmd
+	if zstyle -t :notes:widget:preview enabled ; then
+		if ! zstyle -a :notes:widget:preview command previewcmd ; then
+			previewcmd=(cat)
+		fi
+		cmd+=(
+			--preview="${previewcmd[*]} '$(notes-home)'/{}.md"
+			--bind=tab:toggle-preview
+			--preview-window=right
+		)
+	fi
+	command "${bin}" "${cmd[@]}"
+}
+
 function --notes-pick-fzf
 {
 	emulate -L zsh
-	command fzf --read0 --ansi \
-		--preview="/home/aperez/devel/lowtty/lowtty '$(notes-home)'/{}.md" \
-		--layout=reverse --inline-info --prompt='(notes) ' \
-		--preview-window=down:hidden \
-		--bind=tab:toggle-preview \
-		--bind=ctrl-n:print-query \
-		--query="${1:-}"
+	--notes-pick-fzf-or-skim fzf --layout=reverse --inline-info --query="${1:-}"
 }
 
 function --notes-pick-skim
 {
 	emulate -L zsh
-	command sk --read0 --ansi \
-		--preview="cat '$(notes-home)'/{}.md" \
-		--reverse --prompt='(notes) ' \
-		--preview-window=down:hidden \
-		--bind=tab:toggle-preview \
-		--bind=ctrl-n:print-query \
-		--query="${1:-}"
+	--notes-pick-fzf-or-skim sk --reverse --query="${1:-}"
 }
 
 function --notes-pick-fzy

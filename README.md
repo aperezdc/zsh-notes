@@ -71,3 +71,16 @@ zstyle :notes:widget once no
 # Choose the picker used by the widget. Supported values: fzf, skim, fzy.
 zstyle :notes:widget picker fzf
 ```
+
+When using `fzf` or `skim` it's possible to show a side panel with a preview
+of the notes. The `cat` command is used by default, but any program that can
+render Markdown to ANSI terminal escapes should do (for example
+[mdcat](https://github.com/lunaryorn/mdcat) is known to work well):
+
+```sh
+# Enable preview panel. Disabled by default.
+zstyle :notes:widget:preview enabled yes
+
+# The default is "cat", but can be any command that renders to ANSI escapes.
+zstyle :notes:widget:preview command mdcat -l
+```
